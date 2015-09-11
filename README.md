@@ -38,10 +38,10 @@ findCycles(b);
 //  * $.d and $.d.dep
 ```
 
-If object has the same value for couple properties but it's not circular,
+If object has the same value for couple of properties but it's not circular,
 empty array is returned. Objects of type Number, String, Boolean, RegExp or Date
-are not considered too, it's because they do not cause circular structure
-when serializing to JSON.
+are not taken into account too, it's because they do not cause circular structure
+error when serializing to JSON.
 
 ```javascript
 let obj = new Number(1);

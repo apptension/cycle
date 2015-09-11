@@ -6,22 +6,22 @@ var hasOwnProperty = function hasOwnProperty(obj, prop) {
 };
 var isArray = Array.isArray;
 var comparePaths = function comparePaths(p1, p2) {
-  if ((p1.length === 1) || (p2.length === 1)) {
+  if (p1.length === 1 || p2.length === 1) {
     // root path has common part with every path
     return true;
-  } else {
-    let longer = (p1.length > p2.length ? p1 : p2);
-    let shorter = (p1.length <= p2.length ? p1 : p2);
-
-    // start from 1 to not compare root
-    for (let i = 1, maxi = shorter.length; i < maxi; i++) {
-      if (shorter[i] !== longer[i]) {
-        return false;
-      }
-    }
-
-    return true;
   }
+
+  let longer = p1.length > p2.length ? p1 : p2;
+  let shorter = p1.length <= p2.length ? p1 : p2;
+
+  // start from 1 to not compare root
+  for (let i = 1, maxi = shorter.length; i < maxi; i++) {
+    if (shorter[i] !== longer[i]) {
+      return false;
+    }
+  }
+
+  return true;
 };
 
 
@@ -34,8 +34,8 @@ module.exports = function findCycles(obj) {
 
   (function traverse(value, path) {
     // check only values that can be circular when stringifying to JSON
-    if ((typeof value === 'object') &&
-      (value !== null) &&
+    if (typeof value === 'object' &&
+      value !== null &&
       !(value instanceof Boolean) &&
       !(value instanceof Date) &&
       !(value instanceof Number) &&

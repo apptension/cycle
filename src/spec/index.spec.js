@@ -132,13 +132,12 @@ suite('finding cycles', () => {
     c.dep = a;
     d.dep = d;
 
-    let obj = {a,b,c,d1: d,d2: d, e1: e, e2: e};
+    let obj = {a, b, c, d1: d, d2: d, e1: e, e2: e};
     obj.dep = obj;
 
     let output = findCycles(obj);
 
     assert.equal(output.length, 3);
-    console.log()
     assert.sameMembers(output.map(joinAll).map((paths) => paths.toString()), [
       [['$', 'a'], ['$', 'a', 'dep', 'dep', 'dep']],
       [['$', 'd1'], ['$', 'd1', 'dep']],

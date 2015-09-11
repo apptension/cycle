@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/apptension/cycle.git"
+    "url": "git+https://github.com/apptension/find-cycles.git"
   },
   "keywords": [
     "cycle",
@@ -28,9 +28,9 @@
   "author": "Apptension",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/apptension/cycle/issues"
+    "url": "https://github.com/apptension/find-cycles/issues"
   },
-  "homepage": "https://github.com/apptension/cycle#readme",
+  "homepage": "https://github.com/apptension/find-cycles#readme",
   "devDependencies": {
     "babel": "^5.8.23",
     "babel-eslint": "^4.1.1",

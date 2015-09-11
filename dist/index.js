@@ -21,8 +21,10 @@ module.exports = function findCycles(obj) {
         // mark path as circular if object was seen before
         // add path to it!
         if (objects[i] === value) {
-          paths[i].push([path]);
+          paths[i].push(path);
           circularPaths.push(paths[i]);
+
+          return;
         } else {
           // otherwise, save reference to the object
           // save the first path it was found under

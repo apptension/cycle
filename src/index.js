@@ -5,6 +5,24 @@ var hasOwnProperty = function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 };
 var isArray = Array.isArray;
+var comparePaths = function comparePaths(p1, p2) {
+  if ((p1.length === 1) || (p2.length === 1)) {
+    // root path has common part with every path
+    return true;
+  } else {
+    let longer = (p1.length > p2.length ? p1 : p2);
+    let shorter = (p1.length <= p2.length ? p1 : p2);
+
+    // start from 1 to not compare root
+    for (let i = 1, maxi = shorter.length; i < maxi; i++) {
+      if (shorter[i] !== longer[i]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+};
 
 
 module.exports = function findCycles(obj) {
@@ -12,7 +30,7 @@ module.exports = function findCycles(obj) {
   var objects = [];
   // Keep the path to each unique object or array
   var paths = [];
-  var circularPaths = [];
+  var doubledEntries = [];
 
   (function traverse(value, path) {
     // check only values that can be circular when stringifying to JSON
@@ -29,31 +47,41 @@ module.exports = function findCycles(obj) {
         // mark path as circular if object was seen before
         // add path to it!
         if (objects[i] === value) {
-          paths[i].push([path]);
-          circularPaths.push(paths[i]);
-        } else {
-        // otherwise, save reference to the object
-        // save the first path it was found under
-          objects.push(value);
-          paths.push([path]);
+          paths[i].push(path);
+
+          if (doubledEntries.indexOf(paths[i]) === -1) {
+            doubledEntries.push(paths[i]);
+          }
+
+          return;
         }
       }
 
+      // otherwise, save reference to the object
+      // save the first path it was found under
+      objects.push(value);
+      paths.push([path]);
+
       if (isArray(value)) {
         for (i = 0; i < value.length; i += 1) {
-          traverse(value[i], path + '[' + i + ']');
+          traverse(value[i], path.concat([i.toString()]));
         }
       } else {
         for (var name in value) {
           if (hasOwnProperty(value, name)) {
-            traverse(value[name],
-              path + '[' + name + ']'
-            );
+            traverse(value[name], path.concat([name.toString()]));
           }
         }
       }
     }
-  }(obj, '$'));
+  }(obj, ['$']));
 
-  return circularPaths;
+  return doubledEntries.map((pathsForObject) =>
+    pathsForObject.filter((p1) =>
+      pathsForObject
+        .filter((p2) => p2 !== p1)
+        .some((p2) => comparePaths(p1, p2))
+    )
+  ).filter((pathsForObject) => pathsForObject.length);
 };
+
